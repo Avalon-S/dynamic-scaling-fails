@@ -772,8 +772,11 @@
      control and the blue-green sits right of it, and on the Mamba row they swap. */
   function crossChart(host, cols) {
     host.innerHTML = "";
-    var W = 560, rowH = 58, padT = 10, padB = 26, lw = 104, bw = W - lw - 56;
-    var H = padT + cols.length * rowH + padB;
+    var W = 560, rowH = 58, padT = 10, lw = 104, bw = W - lw - 56;
+    // The legend sits under the bars, so its height is part of the box. Leaving it out
+    // is what put the last two entries on top of the paragraph below the figure.
+    var LEG = 4, legTop = padT + cols.length * rowH + 8;
+    var H = legTop + LEG * 14 + 6;
     var s = el("svg", { viewBox: "0 0 " + W + " " + H }, host);
     var max = 0;
     cols.forEach(function (c) {
@@ -788,6 +791,10 @@
       txt(s, lw - 12, y0 + 22, c.model, { "text-anchor": "end", "font-size": 11.5,
         "font-weight": 600, fill: C.ink });
       var ctl = c.rows.filter(function (r) { return r.key === "zero"; })[0];
+      // under the bars and their labels: on the SSM row the control falls 25px from the
+      // group-wise value and would otherwise be struck through it
+      el("line", { x1: x(ctl.excess), x2: x(ctl.excess), y1: y0 + 2, y2: y0 + 50,
+        stroke: C["ink-3"], "stroke-width": 1.3, "stroke-dasharray": "3 3" }, s);
       SHOW.forEach(function (p, j) {
         var r = c.rows.filter(function (q) { return q.key === p[0]; })[0];
         var y = y0 + 6 + j * 14;
@@ -801,13 +808,11 @@
         txt(s, x(r.excess) + 6, y + 8.5, f(r.excess), { "font-size": 10.5,
           "font-family": "JetBrains Mono, monospace", fill: C["ink-2"] });
       });
-      el("line", { x1: x(ctl.excess), x2: x(ctl.excess), y1: y0 + 2, y2: y0 + 50,
-        stroke: C["ink-3"], "stroke-width": 1.3, "stroke-dasharray": "3 3" }, s);
     });
     legend({ svg: s },
       [["per-token dynamic", C.fail], ["persistent static", C.mid],
        ["persistent group-wise", C.keep], ["zero-state control", C["ink-3"], "3 3"]],
-      lw, H - padB + 6);
+      lw, legTop);
     return s;
   }
 

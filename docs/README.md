@@ -17,7 +17,7 @@ files `scripts/make_figures.py` builds the paper's figures from. Do not edit it 
 Paired *t*-statistics are **recomputed** there from the per-document arrays rather than
 copied out of the paper, so a disagreement surfaces instead of propagating. `--check`
 prints the recomputation next to what the paper prints; it is how the one error in the
-submitted version was found. The three-model comparison additionally asserts that the
+submitted version was found. The three-model comparison also checks that the
 runs behind its columns share a protocol, and refuses to render if they do not — the
 columns mean nothing otherwise.
 

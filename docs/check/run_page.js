@@ -87,6 +87,30 @@ byId.evalseg.children.forEach((c, i) => {
   } else { console.log('abstract matches sec_abstract.tex (' + tex.split(' ').length + ' words)'); }
 })();
 
+// An element drawn below its own viewBox lands on whatever follows the figure. Valid
+// SVG, invisible to every other check here, and it happened.
+(() => {
+  for (const id of ['c-recall', 'c-norm', 'c-contain', 'c-locate', 'c-bits', 'c-h32k',
+                    'c-mem', 'c-cross']) {
+    const host = byId[id];
+    if (!host || !host.kids.length) continue;
+    const svg = host.kids.find((k) => k.tagName === 'svg');
+    if (!svg) continue;
+    const vb = String(svg.attrs.viewBox || '').split(' ').map(Number);
+    if (vb.length !== 4) { bad(id, 'no usable viewBox'); continue; }
+    let low = 0;
+    (function walk(n) {
+      for (const k of n.kids || []) {
+        for (const a of ['y', 'y1', 'y2', 'cy']) {
+          if (k.attrs[a] != null) low = Math.max(low, Number(k.attrs[a]));
+        }
+        walk(k);
+      }
+    })(svg);
+    if (low > vb[3]) bad(id, 'drawn past its viewBox: lowest y=' + low + ' in a box ' + vb[3] + ' tall');
+  }
+})();
+
 console.log('\nsample readouts at the end:');
 console.log('  verdict : ' + byId['ro-verdict'].innerHTML.replace(/<[^>]+>/g, '').slice(0, 150));
 console.log('  h32k    : ' + byId['h32k-read'].innerHTML.replace(/<[^>]+>/g, '').slice(0, 150));
