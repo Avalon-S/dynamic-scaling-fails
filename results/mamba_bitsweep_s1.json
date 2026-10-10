@@ -1,0 +1,515 @@
+{
+  "model": "state-spaces/mamba2-1.3b",
+  "summary": {
+    "A0": {
+      "0": 1.0,
+      "1024": 1.0,
+      "2048": 1.0,
+      "4096": 1.0,
+      "8192": 0.0
+    },
+    "INT8": {
+      "0": 1.0,
+      "1024": 1.0,
+      "2048": 1.0,
+      "4096": 0.3333333333333333,
+      "8192": 0.0
+    },
+    "INT5": {
+      "0": 1.0,
+      "1024": 1.0,
+      "2048": 1.0,
+      "4096": 0.0,
+      "8192": 0.0
+    },
+    "INT4": {
+      "0": 1.0,
+      "1024": 1.0,
+      "2048": 0.6666666666666666,
+      "4096": 0.0,
+      "8192": 0.0
+    },
+    "INT3": {
+      "0": 1.0,
+      "1024": 0.0,
+      "2048": 0.0,
+      "4096": 0.0,
+      "8192": 0.0
+    }
+  },
+  "records": [
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT3",
+      "horizon": 0,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT3",
+      "horizon": 1024,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT3",
+      "horizon": 2048,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT3",
+      "horizon": 4096,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 8192,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT8",
+      "horizon": 8192,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 8192,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 8192,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT3",
+      "horizon": 8192,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT3",
+      "horizon": 0,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT3",
+      "horizon": 1024,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT3",
+      "horizon": 2048,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT3",
+      "horizon": 4096,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 8192,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT8",
+      "horizon": 8192,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 8192,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 8192,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT3",
+      "horizon": 8192,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT3",
+      "horizon": 0,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT3",
+      "horizon": 1024,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT3",
+      "horizon": 2048,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT3",
+      "horizon": 4096,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "A0",
+      "horizon": 8192,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT8",
+      "horizon": 8192,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 8192,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 8192,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT3",
+      "horizon": 8192,
+      "seed": 5,
+      "hit": false
+    }
+  ],
+  "seeds": 3,
+  "config": {
+    "horizons": [
+      0,
+      1024,
+      2048,
+      4096,
+      8192
+    ],
+    "bits": [
+      8,
+      5,
+      4,
+      3
+    ],
+    "seeds": 12,
+    "seed_from": 3,
+    "seed_to": 6,
+    "audit": false,
+    "smoke": false,
+    "out": "results/mamba_bitsweep_s1.json"
+  },
+  "minutes": 166.26638946930566
+}

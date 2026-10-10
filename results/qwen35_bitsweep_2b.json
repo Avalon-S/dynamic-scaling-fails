@@ -1,0 +1,1185 @@
+{
+  "model": "Qwen/Qwen3.5-2B",
+  "summary": {
+    "A0": {
+      "0": 1.0,
+      "1024": 1.0,
+      "2048": 1.0,
+      "4096": 1.0
+    },
+    "INT8": {
+      "0": 1.0,
+      "1024": 1.0,
+      "2048": 1.0,
+      "4096": 1.0
+    },
+    "INT5": {
+      "0": 1.0,
+      "1024": 0.8333333333333334,
+      "2048": 0.08333333333333333,
+      "4096": 0.0
+    },
+    "INT4": {
+      "0": 1.0,
+      "1024": 0.16666666666666666,
+      "2048": 0.0,
+      "4096": 0.0
+    }
+  },
+  "records": [
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 0,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 1024,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 2048,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "A0",
+      "horizon": 4096,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 0,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 1024,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 2048,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "INT8",
+      "horizon": 4096,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 0,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 0,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 6,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 1024,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 0,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 1,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 2,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 6,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 7,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 8,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 9,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "INT5",
+      "horizon": 2048,
+      "seed": 11,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 0,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 1,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 2,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 6,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 7,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 8,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 9,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 10,
+      "hit": false
+    },
+    {
+      "cond": "INT5",
+      "horizon": 4096,
+      "seed": 11,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 1,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 2,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 3,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 4,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 5,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 6,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 7,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 8,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 9,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 10,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 0,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 0,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 1,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 2,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 6,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 7,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 8,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 9,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 10,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 1024,
+      "seed": 11,
+      "hit": true
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 0,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 1,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 2,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 6,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 7,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 8,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 9,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 10,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 2048,
+      "seed": 11,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 0,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 1,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 2,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 3,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 4,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 5,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 6,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 7,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 8,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 9,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 10,
+      "hit": false
+    },
+    {
+      "cond": "INT4",
+      "horizon": 4096,
+      "seed": 11,
+      "hit": false
+    }
+  ],
+  "seeds": 12,
+  "minutes": 180.84988096555074
+}

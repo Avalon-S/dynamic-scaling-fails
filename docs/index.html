@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>When Dynamic Scaling Fails</title>
+<meta name="description" content="Linear-attention and SSM LLMs carry long context in a fixed-size recurrent state. Quantizing that state puts the quantizer inside the recurrence, where a feedback between the scale and the state it is measured from decides whether a bit-width survives the decode horizon." />
+<meta property="og:title" content="When Dynamic Scaling Fails: A Scale–State Feedback Governs Recurrent-State Quantization" />
+<meta property="og:description" content="INT4 that leaves synthetic recall perfectly intact at the start destroys it a thousand steps later. Yoking the quantizer scale to a full-precision reference removes the norm explosion entirely and recovers only 1.8 of the 5.4 nats." />
+<meta name="theme-color" content="#946f1d" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23fffdf6'/%3E%3Cpath d='M16 27C9.5 24.5 6.5 18.5 6.5 11.5' fill='none' stroke='%23d9a83c' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M16 27c6.5-2.5 9.5-8.5 9.5-15.5' fill='none' stroke='%23d9a83c' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M18 19.5h-4.5l3.5-7H12.5' fill='none' stroke='%23a855f7' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="static/css/style.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container">
+    <a class="brand" href="#top">Scale<span>&ndash;</span>State</a>
+    <ul>
+      <li><a href="#phenomenon">Phenomenon</a></li>
+      <li><a href="#loop">The loop</a></li>
+      <li><a href="#contain">Containment</a></li>
+      <li><a href="#bits">Bits</a></li>
+      <li><a href="#horizon">Horizon</a></li>
+      <li><a href="#scope">Scope</a></li>
+      <li><a href="#bibtex">BibTeX</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="container">
+    <span class="eyebrow">Linear attention &amp; SSMs &middot; state-only &middot; training-free</span>
+    <h1>When Dynamic Scaling <span class="hl">Fails</span></h1>
+    <p class="subtitle">A Scale&ndash;State Feedback Governs Recurrent-State Quantization
+      in Linear-Attention and SSM LLMs</p>
+    <p class="authors"><a href="mailto:jyhtjtj@gmail.com">Yuhang Jiang</a></p>
+    <p class="affil">Independent Researcher</p>
+    <p class="affil venue">NeurIPS 2026 Workshop on Long-Context Foundation Models</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="https://openreview.net/forum?id=4DvSLh9jTY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v2H4zm0 7h16v2H4zm0 7h10v2H4z"/></svg>OpenReview</a>
+      <a class="btn" href="https://github.com/Avalon-S/dynamic-scaling-fails" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M9.4 16.6 4.8 12l4.6-4.6-1.4-1.4L2 12l6 6zm5.2 0 4.6-4.6L14.6 7.4l1.4-1.4L22 12l-6 6z"/></svg>Code</a>
+      <a class="btn" href="#bibtex">
+        <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6V2zm8 1.5V8h4.5L14 3.5zM8 12h8v1.6H8zm0 3.5h8v1.6H8z"/></svg>BibTeX</a>
+    </div>
+  </div>
+</header>
+
+<div class="container"><div class="stats" id="stats"></div></div>
+
+<section class="block">
+  <div class="container narrow">
+    <div class="card tldr" id="tldr"></div>
+    <details class="abstract">
+      <summary>Read the abstract</summary>
+      <p class="abstract-body"><!-- a copy of Paper_Writing/sec_abstract.tex; check/run_page.js compares them -->
+      Linear-attention and state-space LLMs carry long context in a fixed-size recurrent state, and
+      quantizing that state is the natural way to cut its cost during long decode. Unlike a weight
+      tensor, the state is rewritten at every step, so a quantizer applied at each step sits inside
+      the recurrence and its errors compound. INT4 that leaves synthetic recall perfectly intact at
+      the start destroys it a thousand steps later. The mechanism is a feedback between the
+      quantizer scale and the state it is derived from. Yoking that scale to a full-precision
+      reference removes the resulting norm explosion entirely, yet recovers only 1.8 of the 5.4 nats
+      lost, so numerical instability and functional degradation are separable failures. The
+      remainder is a resolution problem that locating outliers does not solve, since every
+      outlier-aware scheme here loses to plain persistent scaling. Allocating bits across layers
+      does help, but under article-disjoint splits a learned allocation collapses onto the trivial
+      rule of protecting the first few layers. Run out to 32K, group-wise INT4 is worth no more than
+      discarding the state. Contain the scale rather than locate outliers, and report the decode
+      horizon at which a bit-width was certified.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── 1. the phenomenon ─────────────────────────── -->
+<section class="block alt" id="phenomenon">
+  <div class="container">
+    <div class="kicker">The phenomenon</div>
+    <h2>A bit-width is not safe or unsafe. It is safe <em>for so long</em>.</h2>
+    <p class="lede">Quantize the recurrent state at every decode step and ask the model, at the
+      end, for a fact planted before the quantization began. At the moment quantization starts,
+      every bit-width answers perfectly. Drag the horizon and watch where each one lets go.</p>
+
+    <div class="slider-row">
+      <label for="hslider">quantized decode horizon <span class="mono" id="hval"></span></label>
+      <input type="range" id="hslider" min="0" max="4" step="1" value="0" />
+      <div class="ticks" id="hticks"></div>
+    </div>
+
+    <div class="two">
+      <figure class="panel">
+        <figcaption>NIAH recall, 12 seeds &mdash; GDN 0.8B</figcaption>
+        <div id="c-recall"></div>
+        <p class="note" id="recall-read"></p>
+      </figure>
+      <figure class="panel">
+        <figcaption>Recurrent-state norm on independent articles, log scale</figcaption>
+        <div id="c-norm"></div>
+        <p class="note">Per-token dynamic INT4 inflates the state by two to three orders of
+          magnitude. Every static curve sits on the unquantized reference.</p>
+      </figure>
+    </div>
+    <p class="aside">Nothing is measured between <span class="mono">H=0</span> and
+      <span class="mono">H=1024</span>, so the page draws that span faintly, as the paper does.</p>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── 2. the loop ───────────────────────────────── -->
+<section class="block" id="loop">
+  <div class="container">
+    <div class="kicker">The mechanism</div>
+    <h2>The quantizer measures the thing it is damaging</h2>
+    <p class="lede">Per-token dynamic scaling reads its scale from the state it is about to
+      quantize. Quantization error inflates the state; a bigger state raises the scale; a coarser
+      grid inflates it further. To test whether that loop is the cause rather than a correlate, we
+      run the same quantizer twice and, in one arm, take the scale from a full-precision reference
+      running alongside &mdash; the same grid, the same bit-width, but the loop cut.</p>
+
+    <div class="switch-row">
+      <div class="seg" role="group" aria-label="Where the scale comes from">
+        <button type="button" data-yoke="self" aria-pressed="true">Scale from the quantized state</button>
+        <button type="button" data-yoke="yoked" aria-pressed="false">Scale yoked to full precision</button>
+      </div>
+    </div>
+
+    <div class="loopwrap">
+      <div id="c-loop" class="loopdiag"></div>
+      <div class="readouts">
+        <div class="ro" id="ro-norm"></div>
+        <div class="ro" id="ro-excess"></div>
+        <div class="ro wide" id="ro-verdict"></div>
+      </div>
+    </div>
+    <p class="aside">GDN 0.8B, 16 held-out articles, <span class="mono">H=2048</span>. The 2B model
+      behaves the same way; both are in <span class="mono">data.js</span>.</p>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── 3. containment ────────────────────────────── -->
+<section class="block alt" id="contain">
+  <div class="container">
+    <div class="kicker">What contains it</div>
+    <h2>Three remedies work, and they are the same remedy</h2>
+    <p class="lede">If the loop runs through the scale, anything that stops the scale from
+      tracking the state should help &mdash; and what helps says what the loop is made of. Pick an
+      intervention.</p>
+
+    <div class="cards" id="contain-cards"></div>
+    <div class="two wide-left">
+      <figure class="panel">
+        <figcaption>Excess NLL at <span class="mono">H=2048</span>, paired over 16 articles</figcaption>
+        <div id="c-contain"></div>
+      </figure>
+      <div class="panel prose" id="contain-why"></div>
+    </div>
+
+    <h3>Against this: spending the same bits on <em>finding</em> the outliers</h3>
+    <p class="lede narrow-p">Every scheme below is given more information than uniform group-wise
+      scaling, at a matched or higher bit rate. None of them beats it, and giving the extra bits to
+      the most-overflowing channels does not beat giving them to a random subset.</p>
+    <figure class="panel">
+      <figcaption>Matched-rate comparison &mdash; teacher-forced NLL, lower is better</figcaption>
+      <div id="c-locate"></div>
+    </figure>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── 4. bits ───────────────────────────────────── -->
+<section class="block" id="bits">
+  <div class="container">
+    <div class="kicker">What is left</div>
+    <h2>With the loop cut, the rest is resolution</h2>
+    <p class="lede">Yoking removes the runaway and leaves most of the loss. Two accounts survive
+      that: the grid is too coarse, or rounding error simply accumulates over thousands of steps.
+      They make opposite predictions about bit-width, so we ran it &mdash; with the scale yoked, so
+      the feedback cannot confound the sweep.</p>
+
+    <div class="slider-row">
+      <label for="bslider">bit-width, scale yoked <span class="mono" id="bval"></span></label>
+      <input type="range" id="bslider" min="0" max="4" step="1" value="1" />
+      <div class="ticks" id="bticks"></div>
+    </div>
+    <div class="two">
+      <figure class="panel">
+        <figcaption>Yoked residual by bit-width &mdash; 16 articles</figcaption>
+        <div id="c-bits"></div>
+        <p class="note" id="bits-read"></p>
+      </figure>
+      <div class="panel prose" id="bits-why"></div>
+    </div>
+
+    <div class="switch-row">
+      <div class="seg" role="group" aria-label="Rounding mode">
+        <button type="button" data-round="rtne" aria-pressed="true">Round to nearest</button>
+        <button type="button" data-round="sr" aria-pressed="false">Stochastic rounding</button>
+      </div>
+      <p class="note" id="sr-read"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── 5. the horizon trap ───────────────────────── -->
+<section class="block alt" id="horizon">
+  <div class="container">
+    <div class="kicker">The trap</div>
+    <h2>Pick the horizon you would have evaluated at</h2>
+    <p class="lede">Every policy here is certified on natural text at the horizon you choose.
+      Choose a short one and the verdict is encouraging. The same runs continue to 32K.</p>
+
+    <div class="switch-row">
+      <div class="seg" id="evalseg" role="group" aria-label="Evaluation horizon"></div>
+    </div>
+    <div class="verdicts" id="verdicts"></div>
+
+    <figure class="panel">
+      <figcaption>Excess NLL against decode horizon, 7 long articles &mdash; the dashed line is
+        clearing the state to zero</figcaption>
+      <div id="c-h32k"></div>
+    </figure>
+    <p class="note" id="h32k-read"></p>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── 6. scope ──────────────────────────────────── -->
+<section class="block" id="scope">
+  <div class="container">
+    <div class="kicker">Where this matters, and where it does not</div>
+    <h2>How much of the decode cache is the state, really?</h2>
+    <p class="lede">The recurrent state is a fixed cost; in a hybrid, the attention KV cache next
+      to it grows with context. So the case for quantizing the state is strongest in a pure SSM,
+      and weakest exactly where long-context arguments live. Computed from the published configs.</p>
+
+    <div class="slider-row">
+      <label for="cslider">context length <span class="mono" id="cval"></span></label>
+      <input type="range" id="cslider" min="0" max="5" step="1" value="0" />
+      <div class="ticks" id="cticks"></div>
+    </div>
+    <div id="c-mem"></div>
+    <p class="note" id="mem-read"></p>
+    <p class="aside">This is the paper's own limitation, and it is in the Limitations section
+      rather than buried.</p>
+
+    <h3>Does any of it transfer off the delta rule?</h3>
+    <p class="lede narrow-p">The frontier and the feedback do. <em>Which</em> containment wins
+      does not. Below are the same four policies under the same protocol &mdash; 16 held-out
+      articles, <span class="mono">H=2048</span> &mdash; on two delta-rule models and one SSM.
+      Read each row against its own dashed control: a policy to the right of it costs more than
+      discarding the state outright.</p>
+    <figure class="panel">
+      <figcaption>Excess NLL at <span class="mono">H=2048</span> &mdash; dashed line is that
+        model's zero-state control</figcaption>
+      <div id="c-cross"></div>
+    </figure>
+    <p class="note" id="cross-read"></p>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── takeaway ──────────────────────────────────── -->
+<section class="block alt">
+  <div class="container narrow">
+    <div class="kicker">If you quantize a recurrent state</div>
+    <div class="takeaways">
+      <div class="tk"><b>Contain the scale, do not hunt outliers.</b>
+        A calibrated ceiling bounds the feedback edge, a periodic reset interrupts it, and a
+        persistent scale removes it. Schemes that spend their information locating outliers lose to
+        plain persistent scaling.</div>
+      <div class="tk"><b>Report the horizon a bit-width was certified at.</b>
+        Recall at 2K says nothing about 32K, and short evaluations certify policies as safe long
+        before their failures appear.</div>
+      <div class="tk"><b>Check against clearing the state.</b>
+        A policy that loses to a zero-state control is an expensive way of discarding it. Per-token
+        dynamic INT4 loses to it on all three models, and a single persistent scale loses to it on
+        both delta-rule models and beats it on the SSM.</div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="bibtex">
+  <div class="container narrow">
+    <div class="kicker">Cite</div>
+    <h2>BibTeX</h2>
+    <pre class="bib" id="bib"></pre>
+    <p class="note">Non-archival workshop paper. Update this entry if an archival version appears.</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="container">
+    <p>Every number on this page is read from <span class="mono">static/data/data.js</span>, which
+      <span class="mono">scripts/make_page_data.py</span> exports from the same result files the
+      paper's figures are built from.</p>
+  </div>
+</footer>
+
+<div id="tip" class="tip"></div>
+<script src="static/data/data.js"></script>
+<script src="static/js/app.js"></script>
+<script src="static/js/fx.js"></script>
+</body>
+</html>
