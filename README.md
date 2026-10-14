@@ -4,8 +4,13 @@ Code and results for *When Dynamic Scaling Fails: A Scale-State Feedback Governs
 Recurrent-State Quantization in Linear-Attention and SSM LLMs*
 (NeurIPS 2026 Workshop on Long-Context Foundation Models, non-archival).
 
-Paper: https://openreview.net/forum?id=4DvSLh9jTY
+Paper: https://arxiv.org/abs/2610.15139
+Workshop record: https://openreview.net/forum?id=4DvSLh9jTY
 Project page: https://avalon-s.github.io/dynamic-scaling-fails/
+
+The arXiv version is the one to read and cite. The workshop is non-archival, and the
+OpenReview record is the submitted PDF: it predates the Mamba-2 results and the two
+corrections this repository's numbers reflect.
 
 Quantizing the recurrent state of a linear-attention or state-space model puts the
 quantizer **inside** the recurrence, so its error compounds over decode steps. Per-token

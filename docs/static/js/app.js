@@ -841,13 +841,17 @@
   // ═══════════════════════════════════════════════════ bibtex
   function bib() {
     $("bib").textContent =
-      "@inproceedings{whendynamicscalingfails2026,\n"
-      + "  title     = {When Dynamic Scaling Fails: A Scale--State Feedback Governs\n"
-      + "               Recurrent-State Quantization in Linear-Attention and SSM LLMs},\n"
-      + "  author    = {Jiang, Yuhang},\n"
-      + "  booktitle = {NeurIPS 2026 Workshop on Long-Context Foundation Models (LCFM)},\n"
-      + "  year      = {2026},\n"
-      + "  url       = {https://openreview.net/forum?id=4DvSLh9jTY}\n"
+      // arXiv's own generated entry, verbatim: it is what the abstract page hands out,
+      // so matching it keeps one citation key in circulation rather than two.
+      "@misc{jiang2026dynamicscalingfailsscalestate,\n"
+      + "      title={When Dynamic Scaling Fails: A Scale-State Feedback Governs "
+      + "Recurrent-State Quantization in Linear-Attention and SSM LLMs}, \n"
+      + "      author={Yuhang Jiang},\n"
+      + "      year={2026},\n"
+      + "      eprint={2610.15139},\n"
+      + "      archivePrefix={arXiv},\n"
+      + "      primaryClass={cs.LG},\n"
+      + "      url={https://arxiv.org/abs/2610.15139}, \n"
       + "}";
   }
 

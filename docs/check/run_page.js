@@ -32,7 +32,15 @@ function checkReadouts(label) {
   ['c-recall', 'c-norm', 'c-loop', 'c-contain', 'c-locate', 'c-bits', 'c-h32k', 'c-mem'].forEach((id) => {
     if (!byId[id].children.length) bad(label + ' #' + id, 'no svg drawn');
   });
-  if (!byId.bib.textContent.includes('@inproceedings')) bad(label + ' #bib', 'no bibtex');
+  // Check the entry has the parts a citation needs, not one hard-coded entry type:
+  // the type changed from @inproceedings to @article when the arXiv version landed, and
+  // a check on the word alone fails for the wrong reason.
+  const bib = byId.bib.textContent;
+  if (!/^@\w+\{[\w:-]+,/.test(bib.trim())) bad(label + ' #bib', 'no bibtex entry');
+  else ['title', 'author', 'year', 'url'].forEach((f) => {
+    const has = bib.split('\n').some((L) => L.trim().startsWith(f) && L.includes('='));
+    if (!has) bad(label + ' #bib', 'bibtex has no ' + f);
+  });
 }
 checkReadouts('initial');
 
