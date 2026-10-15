@@ -469,8 +469,8 @@ window.LQ = {
    {
     "key": "group32",
     "label": "group-wise INT4 (G=32)",
-    "kind": "confinement",
-    "why": "A separate scale per 32-channel group confines an outlier's inflation to its own group.",
+    "kind": "removed",
+    "why": "A calibrated scale never reads the state, so the edge is gone; the groups buy resolution on top of that.",
     "excess": 2.0921,
     "norm": 18.14,
     "vs": "dynamic4",

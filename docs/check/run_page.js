@@ -54,6 +54,7 @@ function drive(id, n, label) {
 drive('hslider', 5, 'horizon');
 drive('bslider', 5, 'bits');
 drive('cslider', 6, 'context');
+drive('loomH', 5, 'loom');
 
 ['self', 'yoked'].forEach((v) => {
   const b = yokeHost.children.find((c) => c.getAttribute('data-yoke') === v);
@@ -118,6 +119,58 @@ byId.evalseg.children.forEach((c, i) => {
     if (low > vb[3]) bad(id, 'drawn past its viewBox: lowest y=' + low + ' in a box ' + vb[3] + ' tall');
   }
 })();
+
+// The theme toggle redraws every chart against a different set of tokens. Driving it
+// here is the only way a missing dark-scheme colour shows up before a reader sees it.
+(() => {
+  const btn = byId.themeToggle;
+  if (!btn || !(btn.handlers.click || []).length) { bad('theme', 'the toggle is not wired'); return; }
+  for (const want of ['dark', 'light']) {
+    try {
+      btn.fire('click');
+      const got = global.document.documentElement.getAttribute('data-theme');
+      if (got !== want) { bad('theme', 'clicked for ' + want + ', got ' + got); break; }
+      checkReadouts('theme=' + want);
+      for (const id of ['c-recall', 'c-contain', 'c-cross', 'c-h32k']) {
+        const svg = (byId[id].kids || []).find((k) => k.tagName === 'svg');
+        if (!svg) continue;
+        const blank = [];
+        (function walk(n) {
+          for (const k of n.kids || []) {
+            for (const a of ['stroke', 'fill']) {
+              if (k.attrs[a] === '') blank.push(k.tagName + '.' + a);
+            }
+            walk(k);
+          }
+        })(svg);
+        if (blank.length) bad('theme=' + want + ' #' + id,
+          'drawn with an undefined colour: ' + blank.slice(0, 3).join(', '));
+      }
+    } catch (e) { bad('theme=' + want, e.message); break; }
+  }
+})();
+
+// The entrance is a canvas animation: it paints nothing into the DOM, so no other check
+// here can see it. Drive one frame and look at what it asked the context to draw.
+(() => {
+  const cv = byId.weave;
+  const ctx = cv && cv._ctx;
+  if (!ctx) { bad('entrance', 'never ran: no canvas context was requested'); return; }
+  // setTransform alone is not drawing: that is what sizing the canvas does, and a check
+  // on ops.length passed for a frame loop that never ran.
+  const drew = ctx.ops.filter((o) => o === 'stroke' || o === 'fill').length;
+  if (drew < 20) { bad('entrance', 'ran but drew almost nothing: ' + drew + ' strokes/fills'); return; }
+  const blank = ctx.colours.filter((c) => !c || c === 'undefined');
+  if (blank.length) {
+    bad('entrance', blank.length + ' of ' + ctx.colours.length + ' strokes used an undefined colour');
+  }
+  const ttl = byId.title;
+  if (!ttl || !(ttl.handlers.click || []).length) bad('entrance', 'the title does not replay it');
+  else { try { ttl.fire('click'); } catch (e) { bad('entrance replay', e.message); } }
+})();
+
+// contrast and CIE-Lab separation, for both schemes, from the stylesheet itself
+require('./palette.js').run(false).forEach((f) => bad('palette', f));
 
 console.log('\nsample readouts at the end:');
 console.log('  verdict : ' + byId['ro-verdict'].innerHTML.replace(/<[^>]+>/g, '').slice(0, 150));

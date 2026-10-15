@@ -139,7 +139,7 @@ def bits():
     }
 
 
-# ──────────────── containment (a ceiling, an interruption, a confinement)
+# ─────────── containment: a ceiling, an interruption, and the edge removed
 CONTAIN_LABEL = [
     ("dynamic4", "per-token dynamic INT4", "none", "The loop, uncontained."),
     ("dynR128", "periodic reset, K=128", "interruption",
@@ -148,8 +148,12 @@ CONTAIN_LABEL = [
      "Cap the dynamic scale at a calibrated ceiling, so it cannot chase the state up."),
     ("capped_esc", "capped + exact escape", "ceiling",
      "Keep the overflowing elements exactly, on top of the cap. It adds nothing."),
-    ("group32", "group-wise INT4 (G=32)", "confinement",
-     "A separate scale per 32-channel group confines an outlier's inflation to its own group."),
+    # Persistent, not confined: a calibrated scale never reads the state, so there is no
+    # feedback edge left for the grouping to confine. What the extra scales buy is
+    # resolution, and whether that is worth having turns out to depend on the model.
+    ("group32", "group-wise INT4 (G=32)", "removed",
+     "A calibrated scale never reads the state, so the edge is gone; the groups buy "
+     "resolution on top of that."),
 ]
 LOCATE_LABEL = [
     ("refine_top", "extra bits to the most-overflowing channels"),

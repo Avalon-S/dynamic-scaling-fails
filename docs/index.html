@@ -11,14 +11,28 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23fffdf6'/%3E%3Cpath d='M16 27C9.5 24.5 6.5 18.5 6.5 11.5' fill='none' stroke='%23d9a83c' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M16 27c6.5-2.5 9.5-8.5 9.5-15.5' fill='none' stroke='%23d9a83c' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M18 19.5h-4.5l3.5-7H12.5' fill='none' stroke='%23a855f7' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Cinzel:wght@500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="static/css/style.css" />
 </head>
 <body>
 
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <!-- a spindle with thread wound on it: the brand mark, and the kicker glyph -->
+    <symbol id="spindle" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M12 2.4v19.2" />
+        <path d="M8.1 7.2c2.6 1.5 5.2 1.5 7.8 0M7.4 12c3.1 1.8 6.1 1.8 9.2 0M8.1 16.8c2.6 1.5 5.2 1.5 7.8 0" />
+        <path d="M9.6 4.6c1.6.9 3.2.9 4.8 0M9.6 19.4c1.6-.9 3.2-.9 4.8 0" />
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
 <nav class="nav">
   <div class="container">
-    <a class="brand" href="#top">Scale<span>&ndash;</span>State</a>
+    <a class="brand" href="#top"><svg class="brand-mark" aria-hidden="true"><use href="#spindle" /></svg><span class="brand-word">Scale<span>&ndash;</span>State</span></a>
+    <div class="nav-right">
     <ul>
       <li><a href="#phenomenon">Phenomenon</a></li>
       <li><a href="#loop">The loop</a></li>
@@ -28,13 +42,21 @@
       <li><a href="#scope">Scope</a></li>
       <li><a href="#bibtex">BibTeX</a></li>
     </ul>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch theme">
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" /></g></svg>
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.4 8.4 0 0 1 9.4 4 8.4 8.4 0 1 0 20 14.6Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>
+    </button>
+    </div>
   </div>
+  <div class="meander" aria-hidden="true"></div>
 </nav>
+
+<canvas id="weave" aria-hidden="true"></canvas>
 
 <header class="hero" id="top">
   <div class="container">
     <span class="eyebrow">Linear attention &amp; SSMs &middot; state-only &middot; training-free</span>
-    <h1>When Dynamic Scaling <span class="hl">Fails</span></h1>
+    <h1 id="title" title="Weave again">When Dynamic Scaling <span class="hl">Fails</span></h1>
     <p class="subtitle">A Scale&ndash;State Feedback Governs Recurrent-State Quantization
       in Linear-Attention and SSM LLMs</p>
     <p class="authors"><a href="mailto:jyhtjtj@gmail.com">Yuhang Jiang</a></p>
@@ -50,6 +72,19 @@
       <a class="btn" href="#bibtex">
         <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6V2zm8 1.5V8h4.5L14 3.5zM8 12h8v1.6H8zm0 3.5h8v1.6H8z"/></svg>BibTeX</a>
     </div>
+
+    <figure class="loom" id="loom">
+      <figcaption>
+        <span class="lbl">Two INT4 threads, quantized at every step</span>
+        <span class="hint">drag the horizon</span>
+      </figcaption>
+      <div id="loom-art"></div>
+      <div class="loom-foot">
+        <input type="range" id="loomH" min="0" max="4" step="1" value="0"
+               aria-label="Quantized decode horizon" />
+        <p class="loom-read" id="loom-read" aria-live="polite"></p>
+      </div>
+    </figure>
   </div>
 </header>
 
@@ -82,7 +117,7 @@
 <!-- ─────────────────────────────── 1. the phenomenon ─────────────────────────── -->
 <section class="block alt" id="phenomenon">
   <div class="container">
-    <div class="kicker">The phenomenon</div>
+    <div class="kicker"><svg class="mark" aria-hidden="true"><use href="#spindle" /></svg>The phenomenon<span class="rule"></span><span class="ev measured">12 seeds</span></div>
     <h2>A bit-width is not safe or unsafe. It is safe <em>for so long</em>.</h2>
     <p class="lede">Quantize the recurrent state at every decode step and ask the model, at the
       end, for a fact planted before the quantization began. At the moment quantization starts,
@@ -115,7 +150,7 @@
 <!-- ─────────────────────────────── 2. the loop ───────────────────────────────── -->
 <section class="block" id="loop">
   <div class="container">
-    <div class="kicker">The mechanism</div>
+    <div class="kicker"><svg class="mark" aria-hidden="true"><use href="#spindle" /></svg>The mechanism<span class="rule"></span><span class="ev measured">16 articles</span></div>
     <h2>The quantizer measures the thing it is damaging</h2>
     <p class="lede">Per-token dynamic scaling reads its scale from the state it is about to
       quantize. Quantization error inflates the state; a bigger state raises the scale; a coarser
@@ -146,7 +181,7 @@
 <!-- ─────────────────────────────── 3. containment ────────────────────────────── -->
 <section class="block alt" id="contain">
   <div class="container">
-    <div class="kicker">What contains it</div>
+    <div class="kicker"><svg class="mark" aria-hidden="true"><use href="#spindle" /></svg>What contains it<span class="rule"></span><span class="ev measured">16 articles</span></div>
     <h2>Three remedies work, and they are the same remedy</h2>
     <p class="lede">If the loop runs through the scale, anything that stops the scale from
       tracking the state should help &mdash; and what helps says what the loop is made of. Pick an
@@ -175,7 +210,7 @@
 <!-- ─────────────────────────────── 4. bits ───────────────────────────────────── -->
 <section class="block" id="bits">
   <div class="container">
-    <div class="kicker">What is left</div>
+    <div class="kicker"><svg class="mark" aria-hidden="true"><use href="#spindle" /></svg>What is left<span class="rule"></span><span class="ev measured">16 articles</span></div>
     <h2>With the loop cut, the rest is resolution</h2>
     <p class="lede">Yoking removes the runaway and leaves most of the loss. Two accounts survive
       that: the grid is too coarse, or rounding error simply accumulates over thousands of steps.
@@ -209,7 +244,7 @@
 <!-- ─────────────────────────────── 5. the horizon trap ───────────────────────── -->
 <section class="block alt" id="horizon">
   <div class="container">
-    <div class="kicker">The trap</div>
+    <div class="kicker"><svg class="mark" aria-hidden="true"><use href="#spindle" /></svg>The trap<span class="rule"></span><span class="ev measured">30 articles</span></div>
     <h2>Pick the horizon you would have evaluated at</h2>
     <p class="lede">Every policy here is certified on natural text at the horizon you choose.
       Choose a short one and the verdict is encouraging. The same runs continue to 32K.</p>
@@ -231,7 +266,7 @@
 <!-- ─────────────────────────────── 6. scope ──────────────────────────────────── -->
 <section class="block" id="scope">
   <div class="container">
-    <div class="kicker">Where this matters, and where it does not</div>
+    <div class="kicker"><svg class="mark" aria-hidden="true"><use href="#spindle" /></svg>Where this matters, and where it does not<span class="rule"></span><span class="ev control">computed</span></div>
     <h2>How much of the decode cache is the state, really?</h2>
     <p class="lede">The recurrent state is a fixed cost; in a hybrid, the attention KV cache next
       to it grows with context. So the case for quantizing the state is strongest in a pure SSM,
@@ -265,7 +300,7 @@
 <!-- ─────────────────────────────── takeaway ──────────────────────────────────── -->
 <section class="block alt">
   <div class="container narrow">
-    <div class="kicker">If you quantize a recurrent state</div>
+    <div class="kicker"><svg class="mark" aria-hidden="true"><use href="#spindle" /></svg>If you quantize a recurrent state<span class="rule"></span></div>
     <div class="takeaways">
       <div class="tk"><b>Contain the scale, do not hunt outliers.</b>
         A calibrated ceiling bounds the feedback edge, a periodic reset interrupts it, and a
@@ -284,7 +319,7 @@
 
 <section class="block" id="bibtex">
   <div class="container narrow">
-    <div class="kicker">Cite</div>
+    <div class="kicker"><svg class="mark" aria-hidden="true"><use href="#spindle" /></svg>Cite<span class="rule"></span></div>
     <h2>BibTeX</h2>
     <pre class="bib" id="bib"></pre>
     <p class="note">Non-archival workshop paper. Update this entry if an archival version appears.</p>

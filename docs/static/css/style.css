@@ -21,20 +21,80 @@
    --mid 4.50:1, --ink-3 3.75:1, and the three data colours at least 64 apart in CIE Lab,
    so no two lines can be read for one another. */
 
+/* ═══════════════════════════════ golden hour: the light scheme ══════════════ */
 :root {
-  --brand: #946f1d;  --brand-lite: #d9a83c;  --brand-2: #c9973a;
-  --brand-soft: #fbeeca;  --brand-faint: #fdf8ea;
+  --brand: #946f1d;  --brand-lite: #d9a83c;  --brand-2: #c9973a;  --brand-ink: #6d5112;
+  --brand-soft: #fbeeca;  --brand-faint: #fdf8ea;  --brand-rgb: 148, 111, 29;
   --keep: #946f1d;
-  --fail: #8b3fd4;   --fail-lite: #a855f7;   --fail-2: #6321a3;
-  --fail-soft: #ece0fa;   --fail-faint: #faf6fe;
-  --mid: #17837f;
+  --fail: #8b3fd4;   --fail-lite: #a855f7;   --fail-2: #6321a3;   --fail-ink: #5a1d96;
+  --fail-soft: #ece0fa;   --fail-faint: #faf6fe;  --fail-rgb: 139, 63, 212;
+  --mid: #17837f;    --mid-ink: #0f5f5c;     --mid-soft: #d9efee; --mid-rgb: 23, 131, 127;
   --ink: #23211a;    --ink-2: #55503f;    --ink-3: #8a8270;
   --line: #ece5d5;   --line-2: #f7f2e6;   --grid: #f1ebdd;        --grey: #c3bba7;
-  --bg: #fffdf6;     --bg-alt: #faf5e9;
+  --bg: #fffdf6;     --bg-alt: #faf5e9;   --surface: #fffefa;     --surface-2: #f8f2e3;
   /* the two washes behind the hero are the two roles: gold on the left for the policy
      that holds, violet on the right for the one that runs. */
   --hero-a: #fbeeca; --hero-b: #ece0fa;
+  /* ornament only, never data: the gold hairline, the meander, the warp */
+  --hair: rgba(148, 111, 29, .50);  --hair-soft: rgba(148, 111, 29, .17);
+  --marble: #fffefa; --linen: #f6efdf;  --on-gold: #1d1708;  --veil: rgba(255, 253, 246, .76);
   --shadow: 0 1px 2px rgba(35, 33, 26, .05), 0 8px 28px rgba(148, 111, 29, .10);
+  --shadow-lift: 0 2px 4px rgba(35, 33, 26, .06), 0 18px 44px rgba(148, 111, 29, .17);
+  --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --caps: "Cinzel", "Cormorant Garamond", Georgia, serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+
+/* ═════════════════════════ the loom after dusk: the dark variant ══════════
+   Not a blue night. This dark is the colour of a workshop once the sun has gone
+   off the marble: warm umber, with the gold a shade brighter because it is now the only
+   light in the room. Every one of the twelve tokens app.js reads is redefined, or the
+   charts would keep their daylight colours against this ground. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --brand: #e3b84e;  --brand-lite: #f0cf7d;  --brand-2: #f0cf7d;  --brand-ink: #f3dca2;
+    --brand-soft: rgba(227, 184, 78, .16);  --brand-faint: rgba(227, 184, 78, .07);
+    --brand-rgb: 227, 184, 78;
+    --keep: #e3b84e;
+    --fail: #b47cf2;   --fail-lite: #c9a4f7;   --fail-2: #8a53d6;   --fail-ink: #d4bbf9;
+    --fail-soft: rgba(180, 124, 242, .18);  --fail-faint: rgba(180, 124, 242, .08);
+    --fail-rgb: 180, 124, 242;
+    --mid: #3fc0b7;    --mid-ink: #74d6cf;     --mid-soft: rgba(63, 192, 183, .16);
+    --mid-rgb: 63, 192, 183;
+    --ink: #f5efe0;    --ink-2: #c3b9a1;    --ink-3: #8f8773;
+    --line: rgba(227, 184, 78, .20);  --line-2: rgba(245, 239, 224, .07);
+    --grid: rgba(245, 239, 224, .09); --grey: #6f6855;
+    --bg: #15120c;     --bg-alt: #1b1710;   --surface: #221d14;     --surface-2: #1b1710;
+    --hero-a: rgba(227, 184, 78, .13); --hero-b: rgba(180, 124, 242, .13);
+    --hair: rgba(227, 184, 78, .42);  --hair-soft: rgba(227, 184, 78, .15);
+    --marble: #221d14; --linen: #1b1710;  --on-gold: #1d1708;  --veil: rgba(21, 18, 12, .74);
+    --shadow: 0 1px 0 rgba(255, 255, 255, .03) inset, 0 16px 38px rgba(0, 0, 0, .50);
+    --shadow-lift: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 24px 56px rgba(0, 0, 0, .58);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --brand: #e3b84e;  --brand-lite: #f0cf7d;  --brand-2: #f0cf7d;  --brand-ink: #f3dca2;
+  --brand-soft: rgba(227, 184, 78, .16);  --brand-faint: rgba(227, 184, 78, .07);
+  --brand-rgb: 227, 184, 78;
+  --keep: #e3b84e;
+  --fail: #b47cf2;   --fail-lite: #c9a4f7;   --fail-2: #8a53d6;   --fail-ink: #d4bbf9;
+  --fail-soft: rgba(180, 124, 242, .18);  --fail-faint: rgba(180, 124, 242, .08);
+  --fail-rgb: 180, 124, 242;
+  --mid: #3fc0b7;    --mid-ink: #74d6cf;     --mid-soft: rgba(63, 192, 183, .16);
+  --mid-rgb: 63, 192, 183;
+  --ink: #f5efe0;    --ink-2: #c3b9a1;    --ink-3: #8f8773;
+  --line: rgba(227, 184, 78, .20);  --line-2: rgba(245, 239, 224, .07);
+  --grid: rgba(245, 239, 224, .09); --grey: #6f6855;
+  --bg: #15120c;     --bg-alt: #1b1710;   --surface: #221d14;     --surface-2: #1b1710;
+  --hero-a: rgba(227, 184, 78, .13); --hero-b: rgba(180, 124, 242, .13);
+  --hair: rgba(227, 184, 78, .42);  --hair-soft: rgba(227, 184, 78, .15);
+  --marble: #221d14; --linen: #1b1710;  --on-gold: #1d1708;  --veil: rgba(21, 18, 12, .74);
+  --shadow: 0 1px 0 rgba(255, 255, 255, .03) inset, 0 16px 38px rgba(0, 0, 0, .50);
+  --shadow-lift: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 24px 56px rgba(0, 0, 0, .58);
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -290,3 +350,195 @@ input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius
   .block { padding: 46px 0; }
   .stats { margin-top: 10px; }
 }
+
+/* ═══════════════════════════ the theme layer ══════════════════════════════
+   Everything above is the page's structure, and was written before the theme. What
+   follows is the theme: the typography, the meander, the warp, and the chrome that carries
+   them. It overrides rather than edits, so the structure above stays readable as
+   structure. */
+
+/* ── typography: inscription, then the hand ───────────────────────────────
+   Cinzel is cut from Roman inscriptional capitals, which is what the kickers want --
+   they are labels carved above a section, not sentences. Cormorant is a Garamond, the
+   closest a web face gets to the humanist letter this page's marble would carry. Body text
+   stays Inter: a serif at 15px over a long technical argument is a tax on the reader. */
+.hero h1, h2, h3, .stat b, .ro .big {
+  font-family: var(--display); font-weight: 600; letter-spacing: -.004em;
+}
+.hero h1 { font-weight: 600; letter-spacing: -.012em; }
+.hero h1 .hl { font-style: italic; }
+h2 { font-size: 30px; line-height: 1.22; }
+h3 { font-size: 23px; }
+.stat b, .ro .big { font-weight: 700; letter-spacing: -.01em; }
+.kicker {
+  font-family: var(--caps); font-weight: 600; letter-spacing: .20em; font-size: 11.5px;
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+}
+.brand { font-family: var(--caps); font-weight: 700; letter-spacing: .04em; font-size: 17px; }
+.subtitle { font-family: var(--display); font-size: 21px; font-style: italic; }
+
+/* the kicker's glyph: a spindle whorl, and the rule that runs out from it */
+.kicker .mark { width: 13px; height: 13px; flex: none; color: var(--brand); opacity: .9; }
+.kicker .rule { flex: 1 1 40px; height: 1px; min-width: 18px;
+  background: linear-gradient(90deg, var(--hair-soft), transparent); }
+/* and its badge: what kind of evidence the section is about to show */
+.kicker .ev {
+  font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: .09em;
+  padding: 2px 7px; border-radius: 999px; border: 1px solid var(--line);
+  color: var(--ink-3); background: var(--surface-2); text-transform: none;
+}
+.kicker .ev.measured { color: var(--brand-ink); border-color: var(--hair-soft);
+  background: var(--brand-faint); }
+.kicker .ev.control { color: var(--mid-ink); border-color: rgba(var(--mid-rgb), .3);
+  background: var(--mid-soft); }
+
+/* ── the meander ──────────────────────────────────────────────────────────
+   The Greek key, drawn in gradients rather than an image so it inherits the gold token
+   and survives a theme switch. It runs under the nav and over the footer, and it is
+   ornament: it never encodes anything. */
+.meander {
+  height: 9px; background-repeat: repeat-x; background-size: 24px 9px; opacity: .72;
+  background-image:
+    linear-gradient(var(--hair) 0 0), linear-gradient(var(--hair) 0 0),
+    linear-gradient(var(--hair) 0 0), linear-gradient(var(--hair) 0 0),
+    linear-gradient(var(--hair) 0 0);
+  background-position: 0 0, 0 8px, 6px 2px, 12px 4px, 18px 2px;
+  background-size: 24px 1px, 24px 1px, 1px 7px, 12px 1px, 1px 5px;
+}
+.nav .meander { position: absolute; left: 0; right: 0; bottom: -9px; }
+.nav { position: sticky; }
+
+/* ── the warp ─────────────────────────────────────────────────────────────
+   Vertical threads behind the hero, as on a loom still strung. Very faint: at 4% they
+   read as texture rather than as lines, which is the point -- the moment they read as
+   lines a reader starts looking for data in them. */
+.hero { position: relative; overflow: hidden; }
+.hero::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: repeating-linear-gradient(90deg,
+    var(--hair-soft) 0 1px, transparent 1px 34px);
+  opacity: .34;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 62%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 22%, #000 62%, transparent);
+}
+.hero .container { position: relative; z-index: 1; }
+
+/* ── nav: the brand mark and the theme toggle ─────────────────────────────── */
+.nav .container { gap: 16px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; }
+.brand-mark { width: 21px; height: 21px; flex: none; color: var(--brand); }
+.nav-right { display: flex; align-items: center; gap: 18px; }
+.theme-toggle {
+  width: 32px; height: 32px; flex: none; display: inline-grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+  color: var(--ink-2); cursor: pointer; padding: 0; transition: color .15s, border-color .15s;
+}
+.theme-toggle:hover { color: var(--brand); border-color: var(--hair-soft); }
+.theme-toggle svg { width: 16px; height: 16px; }
+.theme-toggle .moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .moon { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .sun { display: none; }
+  :root:not([data-theme="light"]) .theme-toggle .moon { display: block; }
+}
+
+/* ── chrome: marble panels with a gold edge ──────────────────────────────── */
+.card, .panel, .ic, .vd, .tk, .stat {
+  background: var(--surface); border-color: var(--line);
+}
+.panel, .card { box-shadow: var(--shadow); }
+/* ── panels as pattern pieces ─────────────────────────────────────────────
+   A piece cut from cloth: one corner taken off square, and a running seam stitched a
+   few millimetres in from the edge it was joined on. The notch is a real cut -- a
+   clip-path, not a gradient standing in for one. */
+.panel { position: relative; }
+.panel::after {
+  content: ""; position: absolute; left: 9px; top: 9px; bottom: 9px; width: 0;
+  border-left: 1px dashed var(--hair-soft); pointer-events: none;
+}
+.panel, .card.tldr {
+  clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% 100%, 0 100%);
+}
+/* the cut leaves no room for a rounded corner on that side */
+.panel, .card.tldr { border-top-right-radius: 0; }
+.block.alt { background: var(--bg-alt); }
+
+/* ── reduced motion ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+/* ── the hero loom ────────────────────────────────────────────────────────
+   One live thing above the fold, as the rest of the series does. The amplitude of each
+   thread is the measured state norm, so the gold one is straight because the measurement
+   is straight. */
+.loom {
+  margin: 30px auto 0; max-width: 640px; padding: 16px 18px 12px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
+  box-shadow: var(--shadow); text-align: left;
+}
+.loom figcaption {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 8px;
+}
+.loom .lbl { font-family: var(--caps); font-size: 11px; letter-spacing: .14em;
+  color: var(--ink-2); font-weight: 600; }
+.loom .hint { font-size: 11.5px; color: var(--ink-3); }
+.loom svg { display: block; width: 100%; height: auto; }
+.loom-foot { display: grid; grid-template-columns: 130px 1fr; gap: 14px; align-items: center;
+  margin-top: 6px; }
+.loom-foot input[type=range] { width: 100%; accent-color: var(--brand); }
+.loom-read { margin: 0; font-size: 12.5px; color: var(--ink-2); line-height: 1.45; }
+.loom-read b { font-family: var(--mono); font-weight: 700; }
+@media (max-width: 620px) { .loom-foot { grid-template-columns: 1fr; } }
+
+/* ── the entrance ─────────────────────────────────────────────────────────
+   Over the page, under the nav, and deaf to the mouse: it is a curtain, not a control. */
+#weave {
+  position: fixed; left: 0; right: 0; top: 58px; bottom: 0; z-index: 50;
+  width: 100%; height: calc(100% - 58px); pointer-events: none;
+}
+#title { cursor: pointer; }
+@media (prefers-reduced-motion: reduce) {
+  #weave { display: none; }
+  #title { cursor: default; }
+}
+
+/* ── bobbins on the containment cards ─────────────────────────────────────
+   The shape says what the policy does to the feedback edge: spilling, bounded by a rim,
+   wound in bands, or wound full and tied off. The number stays in text. */
+.ic { position: relative; padding-left: 52px; }
+.ic .bob { position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 26px; height: 34px; }
+.ic[aria-pressed="true"] .bob { filter: drop-shadow(0 0 4px rgba(var(--brand-rgb), .35)); }
+
+/* ── the seam between sections ────────────────────────────────────────────
+   Where two sections meet, the cloth is joined: a running stitch across the page with
+   the needle still in it at the left. Ornament, like the meander. */
+.block.alt { position: relative; }
+.block.alt::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px;
+  background-image: repeating-linear-gradient(90deg,
+    var(--hair) 0 9px, transparent 9px 17px);
+  opacity: .66;
+}
+.block.alt::after {
+  content: ""; position: absolute; left: calc(50% - 90px); top: -5px;
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 1px solid var(--hair); background: var(--bg-alt);
+}
+
+/* ── stat tiles as spools ─────────────────────────────────────────────────
+   A spool seen end-on: the disc, and the thread wound inside it. */
+.stat { position: relative; padding-left: 40px; }
+.stat::before {
+  content: ""; position: absolute; left: 13px; top: 50%; margin-top: -9px;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid var(--brand); opacity: .42;
+}
+.stat::after {
+  content: ""; position: absolute; left: 18px; top: 50%; margin-top: -4px;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--brand); opacity: .55;
+}
+@media (max-width: 620px) { .stat { padding-left: 34px; } .stat::before { left: 9px; } }

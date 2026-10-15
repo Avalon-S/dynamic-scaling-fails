@@ -195,7 +195,7 @@
   // ═══════════════════════════════════════════════════ state
   var S = {
     hIdx: 0, bIdx: 1, yoke: "self", round: "rtne", contain: "group32",
-    evalIdx: 0, ctxIdx: 0
+    evalIdx: 0, ctxIdx: 0, loomIdx: 0
   };
   var MODEL = "0.8B";
   var BITS = [3, 4, 5, 6, 8];
@@ -481,10 +481,56 @@
   // ═══════════════════════════════════════════════════ 3. containment
   var KIND = {
     none: "uncontained",
-    ceiling: "a ceiling in value",
-    interruption: "an interruption in time",
-    confinement: "a confinement in space"
+    ceiling: "the edge bounded",
+    interruption: "the loop interrupted",
+    removed: "the edge removed"
   };
+
+  /* A bobbin, wound the way its policy treats the feedback edge. The shape carries the
+     kind and nothing else; the nats are printed under it. Drawn at 34x44 and scaled by
+     the card, so it stays crisp. */
+  function bobbin(kind, col) {
+    var ns = "http://www.w3.org/2000/svg";
+    var s = document.createElementNS(ns, "svg");
+    s.setAttribute("viewBox", "0 0 34 44");
+    s.setAttribute("class", "bob");
+    s.setAttribute("aria-hidden", "true");
+    function add(tag, at) {
+      var n = document.createElementNS(ns, tag);
+      for (var k in at) { if (at[k] != null) n.setAttribute(k, at[k]); }
+      s.appendChild(n); return n;
+    }
+    var shaft = C["ink-3"] || "#8a8270";
+    // the two discs and the shaft between them
+    add("rect", { x: 5, y: 3, width: 24, height: 3, rx: 1.5, fill: shaft });
+    add("rect", { x: 5, y: 38, width: 24, height: 3, rx: 1.5, fill: shaft });
+    add("rect", { x: 15.2, y: 6, width: 3.6, height: 32, fill: shaft, opacity: .5 });
+
+    var y, i;
+    if (kind === "interruption") {
+      for (i = 0; i < 3; i++) {                       // bands, with gaps
+        add("rect", { x: 8, y: 9 + i * 10, width: 18, height: 6, rx: 1, fill: col });
+      }
+    } else if (kind === "none") {
+      add("rect", { x: 8, y: 20, width: 18, height: 16, rx: 1, fill: col, opacity: .85 });
+      // and the thread that got off the end
+      add("path", { d: "M26 22 C33 18 30 10 22 11 C14 12 18 4 28 5", fill: "none",
+        stroke: col, "stroke-width": 1.7, "stroke-linecap": "round" });
+    } else if (kind === "ceiling") {
+      add("rect", { x: 8, y: 17, width: 18, height: 19, rx: 1, fill: col });
+      add("line", { x1: 6, x2: 28, y1: 15.5, y2: 15.5, stroke: shaft,
+        "stroke-width": 2, "stroke-linecap": "round" });     // the rim it cannot pass
+    } else {                                           // removed: wound full and tied off
+      add("rect", { x: 8, y: 8, width: 18, height: 28, rx: 1, fill: col });
+      for (i = 0; i < 5; i++) {
+        add("line", { x1: 8, x2: 26, y1: 11 + i * 5.5, y2: 11 + i * 5.5,
+          stroke: "rgba(255,255,255,.22)", "stroke-width": 1 });
+      }
+      add("path", { d: "M26 34 l4 3 -4 2", fill: "none", stroke: col,
+        "stroke-width": 1.6, "stroke-linecap": "round", "stroke-linejoin": "round" });
+    }
+    return s;
+  }
   function contain() {
     var rows = D.contain.rows;
     var cards = $("contain-cards"); cards.innerHTML = "";
@@ -495,6 +541,9 @@
       b.setAttribute("aria-pressed", String(r.key === S.contain));
       b.innerHTML = "<div class='k'>" + KIND[r.kind] + "</div><div class='n'>" + r.label
         + "</div><div class='v'>" + f(r.excess) + " nats</div>";
+      // absolutely positioned, so it does not matter where in the card it lands
+      b.appendChild(bobbin(r.kind, r.kind === "none" ? C.fail
+        : r.key === "group32" ? C.keep : C.mid));
       b.addEventListener("click", function () { S.contain = r.key; render(); });
       cards.appendChild(b);
       if (window.LQFX) window.LQFX.observe(b);
@@ -519,8 +568,11 @@
         + "nothing on top of a ceiling — which is what identifies the ceiling, not the outliers, "
         + "as the operative part.</p>";
     } else if (sel.key === "group32") {
-      extra = "<p>The best of the three, and nobody invented it for this problem. A per-group "
-        + "scale confines an outlier's inflation to its own group: containment on the channel axis.</p>";
+      extra = "<p>The best of these on GDN, and nobody invented it for this problem. Its scale "
+        + "is calibrated off-line and never reads the state, so the feedback edge is gone "
+        + "before the grouping does anything; what the extra scales buy on top of that is "
+        + "resolution. Whether that is worth having depends on the model — on Mamba-2 a "
+        + "single persistent scale does better (see <a href=\"#scope\">Scope</a>).</p>";
     } else if (sel.key !== "dynamic4") {
       extra = "<p>Against per-token dynamic INT4: Δ=" + f(sel.delta) + " nats, t=" + f(sel.t, 2)
         + " over " + sel.n + " paired articles.</p>";
@@ -765,6 +817,243 @@
       + "the result.";
   }
 
+  // ═══════════════════════════════════════════════════ the entrance
+  /* A loom, simulated rather than drawn. Each warp thread is a damped oscillator holding
+     a tension; the shuttle is thrown through them and knocks each one as it goes past.
+     One thread takes more than it holds, snaps, and both halves recoil -- a different
+     thread each load. The break flashes once, the cloth is drawn off, and the canvas
+     empties itself when there is nothing left moving.
+
+     Colours are read from the stylesheet, so it opens in the reader's scheme. Nothing
+     runs at all under prefers-reduced-motion. */
+  function entrance() {
+    var cv = $("weave");
+    if (!cv || !cv.getContext) return;
+    if (window.matchMedia
+      && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var g = cv.getContext("2d");
+    if (!g) return;
+    var raf = 0, last = 0;
+
+    function play() {
+      if (typeof cancelAnimationFrame === "function") cancelAnimationFrame(raf);
+      var dpr = Math.min(2, window.devicePixelRatio || 1);
+      var W = cv.clientWidth || 1200, H = cv.clientHeight || 700;
+      cv.width = W * dpr; cv.height = H * dpr;
+      if (g.setTransform) g.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      var gold = C.brand || "#946f1d", lite = C["brand-2"] || "#c9973a";
+      var runs = C.fail || "#8b3fd4", ground = C.bg || "#fffdf6";
+      var GAP = 30, N = Math.max(6, Math.ceil(W / GAP));
+      var warp = [];
+      for (var i = 0; i < N; i++) {
+        warp.push({
+          x: i * GAP + GAP / 2,
+          d: 0, v: 0,                       // displacement and its rate
+          k: 150 + Math.random() * 40,      // stiffness, so they do not ring in unison
+          c: 3.4 + Math.random() * 0.8,     // damping
+          cut: -1, slack: 0,                // where it broke, and how far it has fallen
+          bias: 0                           // the way it started to go, once it has
+        });
+      }
+      var doomed = 2 + Math.floor(Math.random() * Math.max(1, N - 4));
+      var weft = [];                        // rows the shuttle has finished
+      var sh = { x: -40, y: H * 0.18, vx: W * 0.95, dir: 1, row: 0, live: true };
+      var flash = 0, age = 0, closing = 0;
+
+      function frame(now) {
+        var t = now || Date.now();
+        var dt = Math.min(0.034, (t - (last || t)) / 1000);
+        last = t; age += dt;
+        g.clearRect(0, 0, W, H);
+
+        // the cloth is seen against the page's own ground until it is drawn off
+        var veil = closing > 0 ? Math.max(0, 1 - closing / 0.55) : 1;
+        g.globalAlpha = veil * 0.97;
+        g.fillStyle = ground;
+        g.fillRect(0, 0, W, H);
+        g.save();
+        g.translate(0, closing > 0 ? -H * 0.07 * (1 - veil) : 0);
+
+        // ── the shuttle, thrown back and forth, laying a row each pass ──
+        if (sh.live) {
+          var px = sh.x;
+          sh.x += sh.vx * sh.dir * dt;
+          for (var q = 0; q < warp.length; q++) {       // knock whatever it passed
+            var w = warp[q];
+            if ((px - w.x) * (sh.x - w.x) > 0) continue;
+            /* A thread holding its tension is simply dragged the way the shuttle went,
+               and since the shuttle alternates, those knocks cancel out over a few rows.
+               The failing one is different: the drag it feels is read from the
+               displacement it is already in, so every pass pushes it further the way it
+               was already going instead of back. Same shuttle, same rows -- only where
+               the force is measured from. */
+            if (q !== doomed) { w.v += 74 * sh.dir; continue; }
+            /* It commits to a side on the first pass and is pushed that way from then
+               on. Without this it can sit near zero, where the sign of its displacement
+               flips with the shuttle and the extra drag cancels itself -- which is how
+               one play in ten used to finish with nothing broken. */
+            if (!w.bias) w.bias = sh.dir;
+            w.v += 74 * sh.dir + 95 * w.bias * (1 + Math.abs(w.d) * 0.05);
+          }
+          if (sh.x > W + 30 || sh.x < -30) {
+            weft.push({ y: sh.y, a: 1 });
+            sh.row += 1; sh.dir *= -1; sh.y += GAP * 1.15; sh.vx *= 1.09;
+            if (sh.y > H - 20) sh.live = false;
+          }
+        }
+
+        // ── the warp: springs, and the one whose stiffness reads its own state ──
+        for (var j = 0; j < warp.length; j++) {
+          var p = warp[j];
+          /* Every thread but one holds a fixed stiffness and rings down after it is
+             knocked. The doomed one takes its stiffness from how far it has already
+             moved, so each pass leaves it slacker than the last and the next knock goes
+             further. Nothing else about it differs. That is the whole paper. */
+          var run = (j === doomed) ? 1 + Math.abs(p.d) * 0.075 : 1;
+          /* It loses its damping along with its stiffness: a thread that can no longer
+             hold itself can no longer settle either, so what the shuttle put into it on
+             the last pass is still there on the next one. That is what makes it compound
+             rather than ring down like its neighbours. */
+          p.v += (-(p.k / run) * p.d - (p.c / run) * p.v) * dt;
+          p.d += p.v * dt;
+          if (j === doomed && p.cut < 0 && Math.abs(p.d) > 15) {
+            p.cut = 0.28 + Math.random() * 0.42;        // it goes where it was weakest
+            flash = 1;
+            p.v *= 2.3;
+          }
+          if (p.cut >= 0) { p.slack = Math.min(1, p.slack + dt * 1.5); p.v *= 0.995; }
+
+          var broke = p.cut >= 0;
+          g.globalAlpha = veil * (broke ? 0.95 : 0.52);
+          g.strokeStyle = broke ? runs : gold;
+          g.lineWidth = broke ? 2 : 1;
+          if (!broke) {
+            g.beginPath();
+            for (var y = 0; y <= H; y += 14) {
+              var bow = Math.sin((y / H) * Math.PI) * p.d;       // held at both ends
+              if (y === 0) g.moveTo(p.x + bow, y); else g.lineTo(p.x + bow, y);
+            }
+            g.stroke();
+          } else {
+            var cy = H * p.cut, sl = p.slack;
+            g.beginPath();                                       // the upper half, recoiling
+            for (var y1 = 0; y1 <= cy; y1 += 10) {
+              var u = y1 / Math.max(1, cy);
+              g.lineTo(p.x + Math.sin(u * Math.PI * 0.5) * p.d * (1 + u * 2), y1 - sl * 26 * u);
+            }
+            g.stroke();
+            g.beginPath();                                       // and the lower, falling
+            for (var y2 = cy; y2 <= H; y2 += 10) {
+              var v2 = (y2 - cy) / Math.max(1, H - cy);
+              g.lineTo(p.x - Math.sin((1 - v2) * Math.PI * 0.5) * p.d * (1 + (1 - v2) * 2),
+                y2 + sl * 30 * (1 - v2));
+            }
+            g.stroke();
+          }
+        }
+
+        // ── the rows already laid ──
+        for (var r = 0; r < weft.length; r++) {
+          g.globalAlpha = veil * 0.42;
+          g.strokeStyle = lite; g.lineWidth = 1;
+          g.beginPath();
+          for (var xx = 0; xx <= W; xx += 10) {
+            g.lineTo(xx, weft[r].y + Math.sin(xx / GAP * Math.PI) * 1.5);
+          }
+          g.stroke();
+        }
+        if (sh.live) {                                   // the shuttle itself
+          g.globalAlpha = veil;
+          g.fillStyle = gold;
+          g.beginPath();
+          g.ellipse(sh.x, sh.y, 9, 3, 0, 0, Math.PI * 2);
+          g.fill();
+        }
+
+        // ── the break, lit once ──
+        if (flash > 0) {
+          var b = warp[doomed];
+          g.globalAlpha = veil * flash;
+          g.fillStyle = runs;
+          g.beginPath();
+          g.arc(b.x, H * Math.max(0, b.cut), 3 + 16 * (1 - flash), 0, Math.PI * 2);
+          g.fill();
+          flash = Math.max(0, flash - dt * 2.6);
+        }
+        g.restore();
+
+        // it ends when the shuttle is done and the motion has died out
+        var moving = 0;
+        for (var m = 0; m < warp.length; m++) moving += Math.abs(warp[m].v);
+        if (!sh.live && (moving < 30 || age > 4.2)) closing += dt;
+        if (closing > 0.55) { g.clearRect(0, 0, W, H); raf = 0; last = 0; return; }
+        raf = requestAnimationFrame(frame);
+      }
+      last = 0;
+      raf = requestAnimationFrame(frame);
+    }
+
+    play();
+    var ttl = $("title");
+    if (ttl) ttl.addEventListener("click", play);
+    window.addEventListener("resize", function () {
+      if (typeof cancelAnimationFrame === "function") cancelAnimationFrame(raf);
+      g.clearRect(0, 0, cv.clientWidth, cv.clientHeight);
+    });
+  }
+
+  // ═══════════════════════════════════════════════════ the hero loom
+  /* Two threads, both INT4 at every step. The wobble is the measured state norm: the
+     dynamic thread's scale is read from the state it is about to quantize, so its own
+     error feeds back into the scale, and past H=1024 the measurement runs away. The
+     bound thread's scale was calibrated off-line and cannot be pulled, and its norm is
+     flat in the data. */
+  function loom() {
+    var host = $("loom-art");
+    if (!host) return;
+    var R = D.runaway["0.8B"], Hs = R.Hs;
+    var dyn = R.policies.dynamic4.norm, sta = R.policies.static4.norm;
+    var base = R.policies.unquant.norm[0];
+    var i = Math.max(0, Math.min(Hs.length - 1, S.loomIdx || 0));
+
+    var W = 600, H = 132, padX = 14;
+    host.innerHTML = "";
+    var s = el("svg", { viewBox: "0 0 " + W + " " + H }, host);
+
+    // the warp the threads are strung on, ornament only
+    for (var x = padX; x <= W - padX; x += 30) {
+      el("line", { x1: x, x2: x, y1: 12, y2: H - 12, stroke: C.line,
+        "stroke-width": 1, opacity: .5 }, s);
+    }
+
+    function thread(y, norm, col, label) {
+      // amplitude grows with the log of the norm over its unquantized value, so a
+      // 230x runaway is visible next to a 1.07x one without leaving the box
+      var amp = Math.min(30, 7 * Math.log(Math.max(1, norm / base)) + 1.6);
+      var d = "", n = 120;
+      for (var k = 0; k <= n; k++) {
+        var t = k / n, px = padX + (W - 2 * padX) * t;
+        var ramp = Math.min(1, t * 1.25);
+        var py = y + Math.sin(t * 34) * amp * ramp + Math.sin(t * 11.3) * amp * .45 * ramp;
+        d += (k ? "L" : "M") + px.toFixed(1) + " " + py.toFixed(1);
+      }
+      el("path", { d: d, fill: "none", stroke: col, "stroke-width": 2.1,
+        "stroke-linecap": "round", opacity: .95 }, s);
+      txt(s, padX, y - 34, label, { "font-size": 10.5, fill: C["ink-3"],
+        "letter-spacing": ".08em" });
+    }
+    thread(44, sta[i], C.keep, "SCALE BOUND OFF-LINE");
+    thread(100, dyn[i], C.fail, "SCALE READ FROM THE STATE");
+
+    var f = function (v) { return v >= 1000 ? (v / 1000).toFixed(1) + "k" : v.toFixed(1); };
+    $("loom-read").innerHTML =
+      "At <b>H=" + ktick(Hs[i]) + "</b> the bound thread holds its norm at <b>"
+      + f(sta[i]) + "</b>, against <b>" + f(base) + "</b> unquantized. The thread whose "
+      + "scale is read from the state is at <b>" + f(dyn[i]) + "</b>"
+      + (dyn[i] / base > 50 ? " \u2014 it has come apart." : ".");
+  }
+
   // ═══════════════════════════════════════════════════ does it transfer?
   /* One row per model, one shared x scale, and each model's zero-state control drawn as a
      dashed rule inside its own row. The reversal is the thing to see, so static and
@@ -863,6 +1152,12 @@
     });
   }
   function wireSliders() {
+    var lm = $("loomH");
+    if (lm) {
+      lm.addEventListener("input", function () {
+        S.loomIdx = +lm.value; loom();
+      });
+    }
     var Hs = Object.keys(D.frontier[MODEL].INT4).map(Number)
       .sort(function (a, b) { return a - b; });
     var hs = $("hslider");
@@ -911,7 +1206,7 @@
     readPalette();
     syncControls();
     stats(); tldr();
-    phenomenon(); loop(); contain(); bits(); horizon(); memory(); cross();
+    loom(); phenomenon(); loop(); contain(); bits(); horizon(); memory(); cross();
   }
 
   // Each chart host is watched once; whichever svg is in it when it first comes into
@@ -932,7 +1227,42 @@
     ids.forEach(function (id) { var n = $(id); if (n) io.observe(n); });
   }
 
+  /* The theme toggle in the nav. An explicit choice is remembered; without one the page
+     follows the system setting and keeps following it, so a reader who switches their OS
+     to dark at dusk gets a dark page without having asked twice.
+
+     render() has to run again afterwards: every chart colour is read from CSS at draw
+     time, so the SVGs already on the page are still wearing the old scheme until they are
+     redrawn. */
+  function wireTheme() {
+    var btn = $("themeToggle");
+    if (!btn) return;
+    var root = document.documentElement;
+    var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+    function current() {
+      var set = root.getAttribute("data-theme");
+      return set || (mq && mq.matches ? "dark" : "light");
+    }
+    try {
+      var saved = localStorage.getItem("lq-theme");
+      if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+    } catch (e) { /* private window: the choice lasts this visit */ }
+    btn.addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("lq-theme", next); } catch (e) { /* as above */ }
+      render();
+    });
+    if (mq && mq.addEventListener) {
+      mq.addEventListener("change", function () {
+        if (!root.getAttribute("data-theme")) render();
+      });
+    }
+  }
+
   wireSliders();
+  wireTheme();
+  entrance();
   bib();
   render();
   setTimeout(watchCharts, 0);
