@@ -1,16 +1,18 @@
 # When Dynamic Scaling Fails
 
+[![arXiv](https://img.shields.io/badge/arXiv-2610.15139-8C4A2F?style=flat-square&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.15139)
+[![NeurIPS 2026](https://img.shields.io/badge/NeurIPS%202026-LCFM-8C4A2F?style=flat-square)](https://openreview.net/forum?id=4DvSLh9jTY)
+[![Project page](https://img.shields.io/badge/project-page-2A5C7A?style=flat-square)](https://avalon-s.github.io/dynamic-scaling-fails/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-C79A3C?style=flat-square)](LICENSE)
+[![Results: CC BY 4.0](https://img.shields.io/badge/results-CC%20BY%204.0-C79A3C?style=flat-square)](https://creativecommons.org/licenses/by/4.0/)
+
 Code and results for *When Dynamic Scaling Fails: A Scale-State Feedback Governs
 Recurrent-State Quantization in Linear-Attention and SSM LLMs*
 (NeurIPS 2026 Workshop on Long-Context Foundation Models, non-archival).
 
-Paper: https://arxiv.org/abs/2610.15139
-Workshop record: https://openreview.net/forum?id=4DvSLh9jTY
-Project page: https://avalon-s.github.io/dynamic-scaling-fails/
-
 The arXiv version is the one to read and cite. The workshop is non-archival, and the
-OpenReview record is the submitted PDF: it predates the Mamba-2 results and the two
-corrections this repository's numbers reflect.
+OpenReview record behind the badge is the submitted PDF: it predates the Mamba-2 results
+and the two corrections this repository's numbers reflect.
 
 Quantizing the recurrent state of a linear-attention or state-space model puts the
 quantizer **inside** the recurrence, so its error compounds over decode steps. Per-token
