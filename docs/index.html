@@ -104,12 +104,12 @@
       quantizer scale and the state it is derived from. Yoking that scale to a full-precision
       reference removes the resulting norm explosion entirely, yet recovers only 1.8 of the 5.4 nats
       lost, so numerical instability and functional degradation are separable failures. The
-      remainder is a resolution problem that locating outliers does not solve, since every
-      outlier-aware scheme here loses to plain persistent scaling. Allocating bits across layers
-      does help, but under article-disjoint splits a learned allocation collapses onto the trivial
-      rule of protecting the first few layers. Run out to 32K, group-wise INT4 is worth no more than
-      discarding the state. Contain the scale rather than locate outliers, and report the decode
-      horizon at which a bit-width was certified.</p>
+      remainder is resolution-dependent, and in our per-step setting every outlier-aware scheme we
+      test loses to plain persistent scaling. Allocating bits across layers does help, but under
+      article-disjoint splits a learned allocation collapses onto the trivial rule of protecting the
+      first few layers. Run out to 32K, group-wise INT4 is worth no more than discarding the state.
+      Contain the scale rather than locate outliers, and report the decode horizon at which a
+      bit-width was certified.</p>
     </details>
   </div>
 </section>
