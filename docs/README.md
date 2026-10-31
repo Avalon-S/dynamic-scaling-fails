@@ -16,10 +16,9 @@ files `scripts/make_figures.py` builds the paper's figures from. Do not edit it 
 
 Paired *t*-statistics are **recomputed** there from the per-document arrays rather than
 copied out of the paper, so a disagreement surfaces instead of propagating. `--check`
-prints the recomputation next to what the paper prints; it is how the one error in the
-submitted version was found. The three-model comparison also checks that the
-runs behind its columns share a protocol, and refuses to render if they do not — the
-columns mean nothing otherwise.
+prints the recomputation next to what the paper prints. The three-model comparison
+also checks that the runs behind its columns share a protocol, and refuses to render
+if they do not — the columns mean nothing otherwise.
 
 ## Checking it
 
@@ -35,9 +34,8 @@ catch a renamed key in `data.js`; this does.
 It also checks four things a browser would show a reader and nothing else here would:
 
 - the page's copy of the abstract still matches `sec_abstract.tex`, when the paper source
-  is alongside — two copies of a paragraph with nothing comparing them drifted two rounds
-  of edits apart once;
-- nothing is drawn outside its own `viewBox`, which is how a legend ended up printed over
+  is alongside — two copies of a paragraph drift apart when nothing compares them;
+- nothing is drawn outside its own `viewBox`, which is how a legend ends up printed over
   the paragraph below its figure;
 - the theme toggle runs and every chart redraws in both schemes, since a colour the dark
   scheme forgets reaches the chart as an empty string;

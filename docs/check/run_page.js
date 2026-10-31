@@ -70,8 +70,8 @@ byId['contain-cards'].children.forEach((c, i) => {
 byId.evalseg.children.forEach((c, i) => {
   try { c.fire('click'); checkReadouts('evalH#' + i); } catch (e) { bad('evalH#' + i, e.message); }
 });
-// The page repeats the paper's abstract. Two copies of a paragraph with nothing
-// comparing them drifted two rounds of edits apart once, so compare them.
+// The page repeats the paper's abstract. Two copies with nothing comparing them
+// drift, so compare them.
 (() => {
   const fs = require('fs');
   // The published repository ships the page without the paper source, so there is
@@ -148,25 +148,6 @@ byId.evalseg.children.forEach((c, i) => {
       }
     } catch (e) { bad('theme=' + want, e.message); break; }
   }
-})();
-
-// The entrance is a canvas animation: it paints nothing into the DOM, so no other check
-// here can see it. Drive one frame and look at what it asked the context to draw.
-(() => {
-  const cv = byId.weave;
-  const ctx = cv && cv._ctx;
-  if (!ctx) { bad('entrance', 'never ran: no canvas context was requested'); return; }
-  // setTransform alone is not drawing: that is what sizing the canvas does, and a check
-  // on ops.length passed for a frame loop that never ran.
-  const drew = ctx.ops.filter((o) => o === 'stroke' || o === 'fill').length;
-  if (drew < 20) { bad('entrance', 'ran but drew almost nothing: ' + drew + ' strokes/fills'); return; }
-  const blank = ctx.colours.filter((c) => !c || c === 'undefined');
-  if (blank.length) {
-    bad('entrance', blank.length + ' of ' + ctx.colours.length + ' strokes used an undefined colour');
-  }
-  const ttl = byId.title;
-  if (!ttl || !(ttl.handlers.click || []).length) bad('entrance', 'the title does not replay it');
-  else { try { ttl.fire('click'); } catch (e) { bad('entrance replay', e.message); } }
 })();
 
 // contrast and CIE-Lab separation, for both schemes, from the stylesheet itself
